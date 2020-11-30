@@ -14,6 +14,7 @@ df2.remove("Keywords")
 dataset1 = []
 dataset2 = []
 dataset3 = []
+dataset4 = []
 
 for x in range(0,len(df2)):
      keywords = [df2[x]]
@@ -65,6 +66,23 @@ for x in range(0,len(df2)):
 
 result = pd.concat(dataset3, axis=1)
 result.to_csv('images_trends.csv')
+
+for x in range(0,len(df2)):
+     keywords = [df2[x]]
+     pytrend.build_payload(
+     kw_list=keywords,
+     cat=0,
+     timeframe='2020-04-01 2020-11-02',
+     geo='US-GA',         
+     gprop=''
+     )
+     data = pytrend.interest_over_time()
+     if not data.empty:
+          data = data.drop(labels=['isPartial'],axis='columns')
+          dataset4.append(data)
+          
+result = pd.concat(dataset4, axis=1)
+result.to_csv('web_trends.csv')
 
 executionTime = (time.time() - startTime)
 print('Execution time in sec.: ' + str(executionTime))
